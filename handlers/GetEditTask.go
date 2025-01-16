@@ -10,7 +10,6 @@ import (
 
 func GetEditTask(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	var task models.Task
-	//task := models.Task{}
 
 	taskID := r.FormValue("id")
 	if taskID == "" {

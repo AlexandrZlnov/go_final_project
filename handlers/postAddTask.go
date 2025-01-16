@@ -10,8 +10,6 @@ import (
 	"github.com/AlexandrZlnov/go_final_project/service"
 )
 
-//var dateFormat = "20060102"
-
 func PostAddTask(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	var newTask models.Task
 	var bufer bytes.Buffer
@@ -22,9 +20,6 @@ func PostAddTask(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		return
 	}
 
-	// if err = json.Unmarshal(bufer.Bytes(), &newTask); err != nil {
-	// 	service.Error(w, "Unmarshal error", http.StatusBadRequest)
-	// 	return
 	err = json.Unmarshal(bufer.Bytes(), &newTask)
 	if err != nil {
 		service.Error(w, "Error decoding JSON", http.StatusBadRequest)
@@ -33,8 +28,6 @@ func PostAddTask(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 
 	validTask, err := models.Task.ValidateTaskData(newTask)
 	if err != nil {
-		// service.Error(w, "Error validating task", http.StatusBadRequest)
-		// return
 		service.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -58,7 +51,6 @@ func PostAddTask(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		return
 	}
 
-	//service.Success(w, id, http.StatusOK)
 	jsonResponse := map[string]int64{"id": id}
 	service.Success(w, jsonResponse, http.StatusCreated)
 }

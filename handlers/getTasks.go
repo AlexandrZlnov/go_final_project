@@ -16,7 +16,6 @@ const taskLimitPerPage = 15
 
 func GetTasks(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	var tasks []models.Task
-	//var taskList bites.Buffer
 
 	searchQuery := r.FormValue("search")
 
@@ -46,13 +45,11 @@ func GetTasks(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 			service.Error(w, "Ошибка запроса БД", http.StatusInternalServerError)
 			return
 		}
-
 		tasks = processingDBQueryResults(w, rows)
 	}
 
 	jsonResponse := map[string][]models.Task{"tasks": tasks}
 	service.Success(w, jsonResponse, http.StatusOK)
-
 }
 
 func processingDBQueryResults(w http.ResponseWriter, rows *sql.Rows) []models.Task {
@@ -68,7 +65,6 @@ func processingDBQueryResults(w http.ResponseWriter, rows *sql.Rows) []models.Ta
 			service.Error(w, "Ошибка сканирования БД", http.StatusInternalServerError)
 			return nil
 		}
-
 		tasks = append(tasks, task)
 	}
 
@@ -86,10 +82,5 @@ func processingDBQueryResults(w http.ResponseWriter, rows *sql.Rows) []models.Ta
 		return nil
 	}
 
-	// if len(tasks) > taskLimitPerPage {
-	// 	tasks = tasks[:taskLimitPerPage]
-	// }
-
 	return tasks
-
 }

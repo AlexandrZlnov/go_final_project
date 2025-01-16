@@ -38,6 +38,10 @@ func (t Task) ValidateTaskData() (Task, error) {
 			t.Date = now.Format(dateFormat)
 		}
 
+		if len(t.Repeat) == 1 && t.Repeat == "w" {
+			return t, fmt.Errorf("неподдерживаемый формат правила повторения задачи")
+		}
+
 		if t.Repeat != "" {
 			nextDate, err := service.NextDate(now, t.Date, t.Repeat)
 			if err != nil {

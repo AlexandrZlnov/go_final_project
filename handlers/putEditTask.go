@@ -59,5 +59,4 @@ func PutEditTask(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 
 	jsonResponse := map[string][]models.Task{}
 	service.Success(w, jsonResponse, http.StatusOK)
-
 }

@@ -12,7 +12,6 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
 	_ "modernc.org/sqlite"
-	//"github.com/AlexandrZlnov/go_final_project/service"
 )
 
 func CreateDB(db *sql.DB) {
@@ -34,7 +33,6 @@ func CreateDB(db *sql.DB) {
 		fmt.Println("Ошибка при создании индекса:", err)
 		return
 	}
-	//fmt.Println("Таблица создана")
 }
 
 func main() {
@@ -49,11 +47,7 @@ func main() {
 		fmt.Println("Переменная среды PORT не установлена, используем порт по умолчанию: 8080")
 	}
 
-	// webDir := os.Getenv("WEB_DIR")
-	// http.Handle("/", http.FileServer(http.Dir(webDir)))
-
 	NameDBFile := os.Getenv("TODO_DBFILE")
-	//fmt.Println(NameDBFile)
 	db, err := sql.Open("sqlite", NameDBFile)
 	if err != nil {
 		fmt.Println(err)
@@ -86,52 +80,13 @@ func main() {
 	r.Get("/api/tasks", func(w http.ResponseWriter, r *http.Request) { handlers.GetTasks(w, r, db) })
 	r.Get("/api/task", func(w http.ResponseWriter, r *http.Request) { handlers.GetEditTask(w, r, db) })
 	r.Put("/api/task", func(w http.ResponseWriter, r *http.Request) { handlers.PutEditTask(w, r, db) })
-	r.Delete(("/api/task"), func(w http.ResponseWriter, r *http.Request) { handlers.DeleteTask(w, r, db) } )
+	r.Delete(("/api/task"), func(w http.ResponseWriter, r *http.Request) { handlers.DeleteTask(w, r, db) })
 	r.Post("/api/task", func(w http.ResponseWriter, r *http.Request) { handlers.PostAddTask(w, r, db) })
-	r.Post("/api/task/done", func(w http.ResponseWriter, r *http.Request) {handlers.PostDoneTask(w, r, db) })
+	r.Post("/api/task/done", func(w http.ResponseWriter, r *http.Request) { handlers.PostDoneTask(w, r, db) })
 
 	fmt.Println("Server is running on port:", Port)
 	if err := http.ListenAndServe(":"+Port, r); err != nil {
 		fmt.Printf("Server startup error, %v", err.Error())
 		return
 	}
-
-	// ----------------------------------------------------------------------------------------
-
-	// загружаем переменные окружения из файла .env
-	// errEnv := godotenv.Load()
-	// if errEnv != nil {
-	// 	log.Fatal("Ошибка при загрузке .env file")
-	// }
-
-	// port := os.Getenv("TODO_PORT")
-	// if port == "" {
-	// 	port = "8080"
-	// 	fmt.Println("Переменная среды PORT не установлена, используем порт по умолчанию: 8080")
-	// }
-
-	// // запускаем файловый сервер
-	// webDir := os.Getenv("WEB_DIR")
-	// http.Handle("/", http.FileServer(http.Dir(webDir)))
-
-	// // проверка наличия файла БД
-	// // создание фала БД в случае отсутствия
-	// db, err := storage.CheckDBFile()
-	// if err !=nil {
-	// 	log.Fatalf("Ошибка при подключении к БД: %v", err)
-	// }
-	// defer db.Close()
-
-	// // запускаем роутер Chi
-	// r := chi.NewRouter()
-	// r.Get("/api/nextdate", handlers.NextDate)
-	// r.Get("/index", handlers.GetStatic)
-	// r.Post("/api/task", func(w http.ResponseWriter, r *http.Request) {handlers.AddTask(w, r, db)})
-
-	// fmt.Println("Сервер работает на порту:", port)
-	// if err := http.ListenAndServe(":"+port, nil); err != nil {
-	// 	fmt.Printf("Ошибка при запуске сервера: %s", err.Error())
-	// 	return
-	// }
-
 }

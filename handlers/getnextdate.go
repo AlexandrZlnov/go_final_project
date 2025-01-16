@@ -12,6 +12,12 @@ var dateFormat = "20060102"
 
 func GetNextDate(w http.ResponseWriter, r *http.Request) {
 	date := r.FormValue("date")
+
+	if date == "" {
+		http.Error(w, "Не указана дата", http.StatusBadRequest)
+		return
+	}
+
 	repeat := r.FormValue("repeat")
 	now, err := time.Parse(dateFormat, r.FormValue("now"))
 	if err != nil {
@@ -21,7 +27,7 @@ func GetNextDate(w http.ResponseWriter, r *http.Request) {
 
 	nextDate, err := service.NextDate(now, date, repeat)
 	if err != nil {
-		http.Error (w, "Неудачная попытка вычисления даты переноса", http.StatusInternalServerError)
+		http.Error(w, "Неудачная попытка вычисления даты переноса", http.StatusInternalServerError)
 		return
 	}
 

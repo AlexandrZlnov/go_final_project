@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"database/sql"
-	//"encoding/json"
 	"net/http"
 	"time"
 
@@ -11,11 +10,7 @@ import (
 )
 
 func PostDoneTask(w http.ResponseWriter, r *http.Request, db *sql.DB) {
-	//var task models.Task
 	task := models.Task{}
-
-	var dateFormat = "20060102"
-
 	taskID := r.FormValue("id")
 
 	if taskID == "" {
@@ -58,15 +53,7 @@ func PostDoneTask(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 			return
 		}
 	}
+
 	jsonResponse := map[string]models.Task{}
 	service.Success(w, jsonResponse, http.StatusOK)
-
-	// w.WriteHeader(http.StatusOK)
-	// writeInfo(w, map[string]models.Task{})
-
 }
-
-// func writeInfo(w http.ResponseWriter, out any) {
-// 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-// 	json.NewEncoder(w).Encode(out)
-// }
