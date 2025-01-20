@@ -10,8 +10,6 @@ import (
 	"github.com/AlexandrZlnov/go_final_project/service"
 )
 
-var datesFormat = "20060102"
-
 const taskLimitPerPage = 15
 
 func GetTasks(w http.ResponseWriter, r *http.Request, db *sql.DB) {
@@ -22,7 +20,7 @@ func GetTasks(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	if len(searchQuery) > 0 {
 		dateTime, err := time.Parse("02.01.2006", searchQuery)
 		if err != nil {
-			rows, err := db.Query("SELECT * FROM scheduler WHERE title LIKE :search OR comment LIKE :search ORDER BY date LIMIT :limit ",
+			rows, err := db.Query("SELECT ID, Date, Title, Comment, Repeat FROM scheduler WHERE title LIKE :search OR comment LIKE :search ORDER BY date LIMIT :limit ",
 				sql.Named("search", fmt.Sprint("%"+searchQuery+"%")), sql.Named("limit", taskLimitPerPage))
 			if err != nil {
 				service.Error(w, "Ошибка запроса к БД по полю title", http.StatusInternalServerError)
@@ -30,8 +28,8 @@ func GetTasks(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 			}
 			tasks = processingDBQueryResults(w, rows)
 		} else {
-			rows, err := db.Query("SELECT * FROM scheduler WHERE date = :date ORDER BY date LIMIT :limit",
-				sql.Named("date", dateTime.Format(datesFormat)), sql.Named("limit", taskLimitPerPage))
+			rows, err := db.Query("SELECT ID, Date, Title, Comment, Repeat FROM scheduler WHERE date = :date ORDER BY date LIMIT :limit",
+				sql.Named("date", dateTime.Format(service.DateFormat)), sql.Named("limit", taskLimitPerPage))
 			if err != nil {
 				service.Error(w, "Ошибка запроса БД по полю date", http.StatusInternalServerError)
 				return
@@ -39,7 +37,7 @@ func GetTasks(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 			tasks = processingDBQueryResults(w, rows)
 		}
 	} else {
-		rows, err := db.Query("SELECT * FROM scheduler ORDER BY date LIMIT :limit", 
+		rows, err := db.Query("SELECT ID, Date, Title, Comment, Repeat FROM scheduler ORDER BY date LIMIT :limit", 
 		sql.Named("limit", taskLimitPerPage))
 		if err != nil {
 			service.Error(w, "Ошибка запроса БД", http.StatusInternalServerError)

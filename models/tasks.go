@@ -7,8 +7,6 @@ import (
 	"github.com/AlexandrZlnov/go_final_project/service"
 )
 
-var dateFormat = "20060102"
-
 type Task struct {
 	ID      string `json:"id"`      // идентификатор задачи
 	Date    string `json:"date"`    // дата задачи в формате 20060102
@@ -25,17 +23,17 @@ func (t Task) ValidateTaskData() (Task, error) {
 	}
 
 	if t.Date == "" {
-		t.Date = now.Format(dateFormat)
+		t.Date = now.Format(service.DateFormat)
 	}
 
-	taskDate, err := time.Parse(dateFormat, t.Date)
+	taskDate, err := time.Parse(service.DateFormat, t.Date)
 	if err != nil {
 		return t, fmt.Errorf("неподдерживаемый формат даты")
 	}
 
-	if taskDate.Format(dateFormat) < now.Format(dateFormat) {
+	if taskDate.Format(service.DateFormat) < now.Format(service.DateFormat) {
 		if t.Repeat == "" {
-			t.Date = now.Format(dateFormat)
+			t.Date = now.Format(service.DateFormat)
 		}
 
 		if len(t.Repeat) == 1 && t.Repeat == "w" {

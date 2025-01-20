@@ -20,8 +20,6 @@ COPY *.go *.md *.env ./
 
 ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 
-ENV TODO_PORT=7540 WEB_DIR="./web" TODO_DBFILE="scheduler.db"
-
 RUN go build -o todo_app
 
 

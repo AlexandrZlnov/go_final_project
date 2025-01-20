@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-var (
+const (
 	DateFormat      = "20060102"
 	TransferDaysMax = 400
 )

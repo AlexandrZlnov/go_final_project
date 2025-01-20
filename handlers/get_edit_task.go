@@ -17,7 +17,7 @@ func GetEditTask(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		return
 	}
 
-	row := db.QueryRow("SELECT * FROM scheduler WHERE id = :id",
+	row := db.QueryRow("SELECT ID, Date, Title, Comment, Repeat FROM scheduler WHERE id = :id",
 		sql.Named("id", taskID))
 	err := row.Scan(&task.ID, &task.Date, &task.Title, &task.Comment, &task.Repeat)
 	if err != nil {

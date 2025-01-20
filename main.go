@@ -36,19 +36,19 @@ func CreateDB(db *sql.DB) {
 }
 
 func main() {
-	EnvirVar := godotenv.Load()
-	if EnvirVar != nil {
+	envirVar := godotenv.Load()
+	if envirVar != nil {
 		log.Fatal("Файл с переменными окружения не найден")
 	}
 
-	Port := os.Getenv("TODO_PORT")
-	if Port == "" {
-		Port = "8080"
+	port := os.Getenv("TODO_PORT")
+	if port == "" {
+		port = "8080"
 		fmt.Println("Переменная среды PORT не установлена, используем порт по умолчанию: 8080")
 	}
 
-	NameDBFile := os.Getenv("TODO_DBFILE")
-	db, err := sql.Open("sqlite", NameDBFile)
+	nameDBFile := os.Getenv("TODO_DBFILE")
+	db, err := sql.Open("sqlite", nameDBFile)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -84,8 +84,8 @@ func main() {
 	r.Post("/api/task", func(w http.ResponseWriter, r *http.Request) { handlers.PostAddTask(w, r, db) })
 	r.Post("/api/task/done", func(w http.ResponseWriter, r *http.Request) { handlers.PostDoneTask(w, r, db) })
 
-	fmt.Println("Server is running on port:", Port)
-	if err := http.ListenAndServe(":"+Port, r); err != nil {
+	fmt.Println("Server is running on port:", port)
+	if err := http.ListenAndServe(":"+port, r); err != nil {
 		fmt.Printf("Server startup error, %v", err.Error())
 		return
 	}
