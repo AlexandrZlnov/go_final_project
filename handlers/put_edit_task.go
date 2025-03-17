@@ -4,17 +4,29 @@ import (
 	"bytes"
 	"database/sql"
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/AlexandrZlnov/go_final_project/models"
 	"github.com/AlexandrZlnov/go_final_project/service"
 )
 
+// хэндлер обработчик PUT запроса по адресу /api/pask
+// сохраняетв в DB изменения у согданной задачи по ее id
+// при нажатии на "сохнарить" фронтенд отправляет значение всех полей методом PUT
+// данные передаются в виде JSON-объекта, как при добавлении задачи, но с полем id:
 func PutEditTask(w http.ResponseWriter, r *http.Request, db *sql.DB) {
+	token, err := service.VerifyToken(r)
+	if err != nil || !token.Valid {
+		log.Println("Получили не валидный токен")
+		service.Error(w, "Authentification required", http.StatusUnauthorized)
+		return
+	}
+
 	var changedTask models.Task
 	var bufer bytes.Buffer
 
-	_, err := bufer.ReadFrom(r.Body)
+	_, err = bufer.ReadFrom(r.Body)
 	if err != nil {
 		service.Error(w, "ReadFrom error", http.StatusBadRequest)
 		return

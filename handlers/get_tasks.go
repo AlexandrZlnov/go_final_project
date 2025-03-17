@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -10,9 +11,24 @@ import (
 	"github.com/AlexandrZlnov/go_final_project/service"
 )
 
+// константа определяет максимальное значение выводимых записей
 const taskLimitPerPage = 15
 
+// хэндлер обработчик POST запроса по адресу /api/tasks
+// возвращает список ближайших задач в формате JSON в виде списка в поле tasks
+// задачи отсортированы по дате в сторону увеличенияя
+// каждая задача содержит все поля таблицы scheduler в виде строк
+// дата представлена в формате 20060102
+
 func GetTasks(w http.ResponseWriter, r *http.Request, db *sql.DB) {
+
+	token, err := service.VerifyToken(r)
+	if err != nil || !token.Valid {
+		log.Println("Получили не валидный токен")
+		service.Error(w, "Authentification required", http.StatusUnauthorized)
+		return
+	}
+
 	var tasks []models.Task
 
 	searchQuery := r.FormValue("search")
@@ -37,8 +53,8 @@ func GetTasks(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 			tasks = processingDBQueryResults(w, rows)
 		}
 	} else {
-		rows, err := db.Query("SELECT ID, Date, Title, Comment, Repeat FROM scheduler ORDER BY date LIMIT :limit", 
-		sql.Named("limit", taskLimitPerPage))
+		rows, err := db.Query("SELECT ID, Date, Title, Comment, Repeat FROM scheduler ORDER BY date LIMIT :limit",
+			sql.Named("limit", taskLimitPerPage))
 		if err != nil {
 			service.Error(w, "Ошибка запроса БД", http.StatusInternalServerError)
 			return

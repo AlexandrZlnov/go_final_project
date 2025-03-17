@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// запуск файл-сервера
 func StartFileServer(w http.ResponseWriter, r *http.Request) {
 	webDir := "web"
 	if _, err := os.Stat(webDir + r.RequestURI); os.IsNotExist(err) {

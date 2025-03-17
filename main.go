@@ -75,14 +75,15 @@ func main() {
 
 	r := chi.NewRouter()
 
-	r.Get("/*", handlers.StartFileServer)
-	r.Get("/api/nextdate", handlers.GetNextDate)
-	r.Get("/api/tasks", func(w http.ResponseWriter, r *http.Request) { handlers.GetTasks(w, r, db) })
-	r.Get("/api/task", func(w http.ResponseWriter, r *http.Request) { handlers.GetEditTask(w, r, db) })
-	r.Put("/api/task", func(w http.ResponseWriter, r *http.Request) { handlers.PutEditTask(w, r, db) })
-	r.Delete(("/api/task"), func(w http.ResponseWriter, r *http.Request) { handlers.DeleteTask(w, r, db) })
-	r.Post("/api/task", func(w http.ResponseWriter, r *http.Request) { handlers.PostAddTask(w, r, db) })
-	r.Post("/api/task/done", func(w http.ResponseWriter, r *http.Request) { handlers.PostDoneTask(w, r, db) })
+	r.Get("/*", handlers.StartFileServer)                                                                      //запуск файл-сервера
+	r.Get("/api/nextdate", handlers.GetNextDate)                                                               //вычисляет следующую дату задачи
+	r.Get("/api/tasks", func(w http.ResponseWriter, r *http.Request) { handlers.GetTasks(w, r, db) })          //возвращает список ближайших задач
+	r.Get("/api/task", func(w http.ResponseWriter, r *http.Request) { handlers.GetEditTask(w, r, db) })        //возвращает все параметры задачи по её id
+	r.Put("/api/task", func(w http.ResponseWriter, r *http.Request) { handlers.PutEditTask(w, r, db) })        //сохраняет в db изменения у согданной задаче
+	r.Delete(("/api/task"), func(w http.ResponseWriter, r *http.Request) { handlers.DeleteTask(w, r, db) })    //удаляет задачу по id
+	r.Post("/api/task", func(w http.ResponseWriter, r *http.Request) { handlers.PostAddTask(w, r, db) })       //добавлет новую задачу
+	r.Post("/api/task/done", func(w http.ResponseWriter, r *http.Request) { handlers.PostDoneTask(w, r, db) }) //делает задачу выполненной
+	r.Post("/api/signin", func(w http.ResponseWriter, r *http.Request) { handlers.PostSignin(w, r) })          //регистнаяи пользователя
 
 	fmt.Println("Server is running on port:", port)
 	if err := http.ListenAndServe(":"+port, r); err != nil {

@@ -4,17 +4,36 @@ import (
 	"bytes"
 	"database/sql"
 	"encoding/json"
+	"log"
 	"net/http"
+	//"os"
 
 	"github.com/AlexandrZlnov/go_final_project/models"
 	"github.com/AlexandrZlnov/go_final_project/service"
+	//"github.com/golang-jwt/jwt/v5"
+	//"github.com/joho/godotenv"
 )
 
+// хэндлер обработчик POST запроса по адресу /api/task
+// добавляет новую задачу
+// запрос и ответ передаются в JSON-формате. Запрос состоит из следующих строковых полей:
+// - date — дата задачи в формате 20060102;
+// - title — заголовок задачи. Обязательное поле;
+// - comment — комментарий к задаче;
+// - repeat — правило повторения. Используется такой же формат, как в предыдущем шаге.
 func PostAddTask(w http.ResponseWriter, r *http.Request, db *sql.DB) {
+
+	token, err := service.VerifyToken(r)
+	if err != nil || !token.Valid {
+		log.Println("Получили не валидный токен")
+		service.Error(w, "Authentification required", http.StatusUnauthorized)
+		return
+	}
+
 	var newTask models.Task
 	var bufer bytes.Buffer
 
-	_, err := bufer.ReadFrom(r.Body)
+	_, err = bufer.ReadFrom(r.Body)
 	if err != nil {
 		service.Error(w, "ReadFrom error", http.StatusBadRequest)
 		return

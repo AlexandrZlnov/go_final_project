@@ -2,13 +2,24 @@ package handlers
 
 import (
 	"database/sql"
+	"log"
 	"net/http"
 
 	"github.com/AlexandrZlnov/go_final_project/models"
 	"github.com/AlexandrZlnov/go_final_project/service"
 )
 
+// хэндлер обработчик DELETE запроса по адресу /api/pask
+// удаляет задачу по id
+// запроса методом DELETE приходит от клиента приходит в формате: /api/task/done?id=<идентификатор>.
 func DeleteTask(w http.ResponseWriter, r *http.Request, db *sql.DB) {
+	token, err := service.VerifyToken(r)
+	if err != nil || !token.Valid {
+		log.Println("Получили не валидный токен")
+		service.Error(w, "Authentification required", http.StatusUnauthorized)
+		return
+	}
+
 	taskID := r.FormValue("id")
 
 	if taskID == "" {

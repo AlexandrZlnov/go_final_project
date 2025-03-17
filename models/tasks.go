@@ -15,6 +15,10 @@ type Task struct {
 	Repeat  string `json:"repeat"`  // правило повторения
 }
 
+type Pass struct {
+	Password string `json:"password"`
+}
+
 func (t Task) ValidateTaskData() (Task, error) {
 	now := time.Now()
 
