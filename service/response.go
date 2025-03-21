@@ -1,3 +1,4 @@
+// вспомогательные функции для работы с HTTP-запросами и ответами в формате JSON.
 package service
 
 import (
@@ -6,10 +7,13 @@ import (
 	"net/http"
 )
 
+// устанавливаем заголовок Content-Type: application/json для ответа
 func setJSONHeader(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
 }
 
+// формирование JSON-ответа с ошибкой
+// возврат ошибку, если не удалось сериализовать JSON или записать ответ
 func Error(w http.ResponseWriter, message string, code int) error {
 	setJSONHeader(w)
 	w.WriteHeader(code)
@@ -27,6 +31,7 @@ func Error(w http.ResponseWriter, message string, code int) error {
 	return nil
 }
 
+// формирование JSON-ответ с успешным результатом
 func Success(w http.ResponseWriter, out any, code int) error {
 	setJSONHeader(w)
 	w.WriteHeader(code)

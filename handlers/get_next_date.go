@@ -8,6 +8,9 @@ import (
 	"github.com/AlexandrZlnov/go_final_project/service"
 )
 
+// хэндлер обработчик GET-запроса, по адресу api/nextdate
+// GET-запрос приходит в формате: "/api/nextdate?now=<20060102>&date=<20060102>&repeat=<правило>"
+// обработчик вызвает функцию NextDate из пакета service и возвращает дату следующего выполнения задачи в формате 20060102
 func GetNextDate(w http.ResponseWriter, r *http.Request) {
 	date := r.FormValue("date")
 

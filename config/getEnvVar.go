@@ -1,3 +1,4 @@
+// функции для получения конфигурационных данных из переменных окружения
 package config
 
 import (
@@ -22,9 +23,5 @@ func GetUserPass() string {
 	if !ok || password == "" {
 		log.Fatal("ERROR: TODO_PASSWORD environment variable is not set")
 	}
-	// password := []byte(passwordStr)
-	// if len(password) == 0 {
-	// 	log.Fatal("ERROR: password variable is empty")
-	// }
 	return password
 }

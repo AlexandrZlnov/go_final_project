@@ -6,12 +6,9 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	//"os"
 
 	"github.com/AlexandrZlnov/go_final_project/models"
 	"github.com/AlexandrZlnov/go_final_project/service"
-	//"github.com/golang-jwt/jwt/v5"
-	//"github.com/joho/godotenv"
 )
 
 // хэндлер обработчик POST запроса по адресу /api/task

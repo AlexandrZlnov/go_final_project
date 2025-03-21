@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	//"os"
 
 	"github.com/AlexandrZlnov/go_final_project/config"
 	"github.com/AlexandrZlnov/go_final_project/models"

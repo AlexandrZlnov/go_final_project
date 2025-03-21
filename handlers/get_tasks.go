@@ -20,6 +20,9 @@ const taskLimitPerPage = 15
 // каждая задача содержит все поля таблицы scheduler в виде строк
 // дата представлена в формате 20060102
 
+// так же возвращает список задач по поисковому запросу
+// полученному в строке запроса в формате /api/tasks?search=поисковый запрос
+
 func GetTasks(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 
 	token, err := service.VerifyToken(r)
